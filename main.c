@@ -40,7 +40,7 @@ void *connection_handler(void *socket_desc) {
         if (client_sockets[i].sock == sock) {
           client_sockets[i].sock = -1;
           client_sockets[i].name = NULL;
-          //client_count--;
+          client_count--;
           break;
         }
       }
@@ -75,6 +75,13 @@ int main() {
   int opt = 1;
   int addrlen = sizeof(address);
 
+  for (int i = 0; i < MAX_CLIENTS; i++) {
+    Client tmp;
+    tmp.sock = -1;
+    tmp.name = NULL;
+    client_sockets[i] = tmp;
+  }
+
   server_socket = socket(AF_INET, SOCK_STREAM, 0);
   setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt));
 
@@ -88,7 +95,7 @@ int main() {
     return 1;
   }
 
-  listen(server_socket, 50);
+  listen(server_socket, MAX_CLIENTS);
   printf("Server listening on port %d\n", PORT);
 
   while (1) {
@@ -100,7 +107,14 @@ int main() {
       Client new_client;
       new_client.sock = new_socket;
       new_client.name = "Client";
-      client_sockets[client_count++] = new_client;
+      for (int i = 0; i < MAX_CLIENTS; i++) {
+        if (client_sockets[i].sock == -1) {
+          client_sockets[i] = new_client;
+          break;
+        }
+      }
+      client_count++;
+      //client_sockets[client_count++] = new_client;
       printClients();
     }
 
