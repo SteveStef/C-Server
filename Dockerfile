@@ -7,7 +7,7 @@ WORKDIR .
 COPY . .
 
 # Compile the server code
-RUN gcc -o server server.c
+RUN gcc -o server main.c
 
 # Make port 8080 available to the world outside this container
 EXPOSE 8080
