@@ -60,7 +60,6 @@ void *connection_handler(void *socket_desc) {
       }
     }
     pthread_mutex_unlock(&client_mutex);
-
     memset(buffer, 0, BUFFER_SIZE);
   }
   
