@@ -133,6 +133,7 @@ int main() {
         removeClient(new_socket);
         return 1;
       }
+
       pthread_detach(client_thread);
     } else {
       printf("Max clients reached\n");
