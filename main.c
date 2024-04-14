@@ -8,7 +8,7 @@
 #include <netinet/in.h>
 
 #define MAX_CLIENTS 100
-#define PORT 9000
+#define PORT 8080
 #define BUFFER_SIZE 1024
 
 int client_sockets[MAX_CLIENTS];
@@ -141,3 +141,4 @@ int main() {
   }
   return 0;
 }
+

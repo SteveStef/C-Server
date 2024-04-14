@@ -9,7 +9,8 @@ COPY . .
 # Compile the server code
 RUN gcc -o server main.c
 
-EXPOSE 9000
+# Make port 8080 available to the world outside this container
+EXPOSE 8080
 
 # Run server.c when the container launches
 CMD ["./server"]
