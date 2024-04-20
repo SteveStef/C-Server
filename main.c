@@ -51,7 +51,7 @@ void removeClient(int client) { // Remove client
 
 void sendToAllClients(char *message, int socket) { // Send message to all clients
   for (int i = 0; i < MAX_CLIENTS; i++) { // Loop through clients
-    if (client_sockets[i] != -1 && client_sockets[i] != socket) { // Check if client socket is not -1 and not equal to socket
+    if(client_sockets[i] != -1 && client_sockets[i] != socket) { // Check if client socket is not -1 and not equal to socket
       write(client_sockets[i], message, strlen(message)); // Write message to client socket
     }
   }
@@ -64,7 +64,7 @@ void *socketListener(void *socket_desc) {
   while (1) {
     int readingData = read(sock, buffer, BUFFER_SIZE); // Read data from socket
 
-    if (readingData <= 0) { // Check if reading data failed
+    if (readingData < 0) { // Check if reading data failed
       removeClient(sock); // Remove client
       printf("Client disconnected\n"); // Print message
       printClients(); // Print clients
@@ -127,11 +127,12 @@ int main() {
       int *new_socket_ptr = malloc(sizeof(int));
       *new_socket_ptr = new_socket;
 
-      if (pthread_create(&client_thread, NULL, socketListener, (void*)new_socket_ptr) < 0) {
+      if(pthread_create(&client_thread, NULL, socketListener, (void*)new_socket_ptr) < 0) {
         perror("could not create thread");
         free(new_socket_ptr); // Free memory on fail
         removeClient(new_socket);
-        return 1;
+        close(new_socket);
+        continue; // Continue to next iteration
       }
 
       // Detach thread to avoid memory leak because we don't need to join it
