@@ -64,7 +64,7 @@ void *socketListener(void *socket_desc) {
   while (1) {
     int readingData = read(sock, buffer, BUFFER_SIZE); // Read data from socket
 
-    if (readingData < 0) { // Check if reading data failed
+    if (readingData <= 0) { // Check if reading data failed
       removeClient(sock); // Remove client
       printf("Client disconnected\n"); // Print message
       printClients(); // Print clients
